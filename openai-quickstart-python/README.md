@@ -127,3 +127,8 @@ print(completion.choices[0].message)
 We need to use [Python Dotenv Library](https://pypi.org/project/python-dotenv). Just install the library `pip install python-dotenv`, create a `.env` file with your environment variables. 
 
 To run the code, enter `python openai-test.py` into the terminal / command line.
+```sh
+$ $ python openai-test.py 
+PROJECT_NAME: openai_quickstart_python
+ChatCompletionMessage(content='In the land of code, where functions dwell,\nThere lies a magical process to tell.\nRecursion, the word whispered with grace,\nA concept woven throughout time and space.\n\nA function calling itself, daring and brave,\nSolving problems in a recursive wave.\nLike a mirror reflecting its own reflection,\nRecursion dives deep, creating connection.\n\nThrough loops and calls, it travels afar,\nUnraveling mysteries, like a shining star.\nEach iteration a step, a loop in time,\nUnfolding the code like a rhythmic chime.\n\nA journey through layers, nested and deep,\nA recursive dance, a rhythm to keep.\nBreaking down tasks into smaller parts,\nRecursion unfolds, connecting hearts.\n\nSo next time you code, with problems complex,\nRemember recursion, a powerful text.\nA looping saga, a story untold,\nIn the realm of programming, a treasure to behold.', role='assistant', function_call=None, tool_calls=None)
+```

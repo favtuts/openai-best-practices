@@ -5,8 +5,13 @@ from openai import OpenAI
 
 load_dotenv()
 
+PROJECT_NAME = os.getenv('PROJECT_NAME')
+print("PROJECT_NAME: " + PROJECT_NAME)
+
+"""
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-print("API_KEY: " + OPENAI_API_KEY)
+print("API_KEY: " + OPENAI_API_KEY) 
+"""
 
 client = OpenAI(
     api_key=OPENAI_API_KEY,
