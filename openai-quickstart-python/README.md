@@ -100,3 +100,30 @@ client = OpenAI()
 #   api_key=os.environ.get("CUSTOM_ENV_NAME"),
 # )
 ```
+
+# Step 3: Sending your first API request
+
+## Making an API request
+
+After you have Python configured and set up an API key, the final step is to send a request to the OpenAI API using the Python library. To do this, create a file named openai-test.py using th terminal or an IDE.
+
+Inside the file, copy and paste one of the examples below:
+
+```python
+from openai import OpenAI
+client = OpenAI()
+
+completion = client.chat.completions.create(
+  model="gpt-4o-mini",
+  messages=[
+    {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
+    {"role": "user", "content": "Compose a poem that explains the concept of recursion in programming."}
+  ]
+)
+
+print(completion.choices[0].message)
+```
+
+We need to use [Python Dotenv Library](https://pypi.org/project/python-dotenv). Just install the library `pip install python-dotenv`, create a `.env` file with your environment variables. 
+
+To run the code, enter `python openai-test.py` into the terminal / command line.
