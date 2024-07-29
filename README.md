@@ -2,4 +2,5 @@
 All examples and practices of OpenAI Platform
 
 # list of practices
-* [Python example app from the OpenAI API quickstart tutorial](./openai-quickstart-python/README.md)
+* [OpenAI API Quickstart](./openai-quickstart-python/README.md)
+* [Chat Completions Guide](./chat-completions-guide/README.md)
