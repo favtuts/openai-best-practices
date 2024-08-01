@@ -5,4 +5,5 @@ All examples and practices of OpenAI Platform
 * [OpenAI API Quickstart](./openai-quickstart-python/README.md)
 * [Chat Completions Guide](./chat-completions-guide/README.md)
 * [Assistants API Quickstart](./assistants-api-quickstart/README.md)
-* [How to Create Your Own GPT with OpenAI’s Assistants API](./assistants-solar-salesrep/README.md)
+* [Smith Solar Assistants](./assistants-solar-salesrep/README.md)
+* [Apple Chatbot Assistants](./assistants-apple-chatbot/README.md)
