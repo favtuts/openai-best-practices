@@ -47,6 +47,7 @@ def chat():
     assistant_id = data.get("assistant_id")
     thread_id = data.get('thread_id')
     user_input = data.get('message', '')
+    file_ids = data.get('file_ids')
     
     if not assistant_id:
         print(f"Error: Missing assistant_id")  # Debugging line
@@ -62,7 +63,8 @@ def chat():
     client.beta.threads.messages.create(
         thread_id=thread_id,
         role="user",
-        content=user_input
+        content=user_input,
+        file_ids=file_ids
         )
     
     # Run the Assistant
@@ -106,12 +108,50 @@ def helloworld():
 
 
 #####################
+# Assistant Files API
+#####################
+@app.route('/manage/assistant/<string:assistant_id>/files', methods=['GET','POST'])
+def all_asistant_files(assistant_id):
+    # Starting process request    
+    try:
+        
+        # Log request event
+        print(f"Assistant all requesting: [{request.method}]")  # Debugging line
+        print(request.query_string)        
+        if request.content_length is not None and request.content_length > 0:     
+            request_body = request.get_json()
+            print(request_body)
+        
+        # List all associated files of the assistant
+        if request.method == 'GET':
+            all_associated_assistant_files_response = client.beta.assistants.files.list(assistant_id=assistant_id)
+            result = create_result_model(True, 1, "OK", all_associated_assistant_files_response.model_dump())
+            return jsonify(result), 200
+        
+        # Associate the file to an assistant
+        if request.method == 'POST':
+            file_id = request_body["file_id"]
+            associate_assistant_file_response = client.beta.assistants.files.create(assistant_id=assistant_id, file_id=key)
+            result = create_result_model(True, 1, "OK", associate_assistant_file_response.model_dump())
+            return jsonify(result), 200
+        
+        # Other not implemented cases                
+        result = create_result_model(False, -998, "Not implemented", None)
+        return jsonify(result), 404
+        
+    except Exception as ex:
+        print(f"{ex}")  # Debugging line
+        result = create_result_model(False, -999, str(ex), None)
+        return jsonify(result), 500
+            
+
+#####################
 # Assistants API
 #####################
 @app.route('/manage/assistants', methods=['GET','POST'])
 def all_assistant():
     
-     # Starting process request    
+    # Starting process request    
     try:
         
         # Log request event
@@ -170,7 +210,7 @@ def all_assistant():
 @app.route('/manage/assistants/<string:key>', methods=['GET','PUT','DELETE'])
 def single_assistant(key):
     
-    # Starting process request    
+    # Starting process request
     try:
         
         # Log request event
@@ -191,7 +231,7 @@ def single_assistant(key):
             
             print(f"Updating assistant with ID: {key} ...")  # Debugging line            
             # Build the dictionary of changes  
-            changes_dict = {}     
+            changes_dict = {}
             if request_body['name'] is not None:
                 changes_dict["name"] = request_body['name']
             if request_body['description'] is not None:
@@ -203,7 +243,7 @@ def single_assistant(key):
                 
             # Update the assistant to OpenAI
             print(changes_dict)
-            client.beta.assistants.update(assistant_id=key, **changes_dict)
+            client.beta.assistants.update(assistant_id=key, **changes_dict)            
             
             # Return result response
             result = create_result_model(True, 1, f"The assistant with ID: {key} is updated successfully", None)
@@ -389,7 +429,7 @@ def single_file(key):
                 status=200,
                 mimetype='application/json'
             )
-            return response """
+            return response """               
         
         # Delete the file from OpenAI
         if request.method == "DELETE":            
