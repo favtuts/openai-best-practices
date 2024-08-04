@@ -1,0 +1,19 @@
+{
+    "created_at": 1722787694,
+    "expires_after": null,
+    "expires_at": null,
+    "file_counts": {
+        "cancelled": 0,
+        "completed": 1,
+        "failed": 0,
+        "in_progress": 0,
+        "total": 1
+    },
+    "id": "vs_s8keD7ReRDgpCENB5misnLDm",
+    "last_active_at": 1722787696,
+    "metadata": {},
+    "name": "Document Statements",
+    "object": "vector_store",
+    "status": "completed",
+    "usage_bytes": 13381
+}

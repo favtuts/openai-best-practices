@@ -389,6 +389,60 @@ $ exit
 
 Install dependencies
 ```sh
-$ pip install --upgrade openai
-$ pip install python-dotenv[cli]
+$ pipenv install openai
+$ pipenv install python-dotenv[cli]
+$ pipenv install packaging
 ```
+
+Setup `.env` file:
+```sh
+$ touch .env
+
+# Once you add your API key below, make sure to not share it with anyone! The API key should remain private.
+OPENAI_API_KEY=abc123
+```
+
+# Run and test 
+
+Run directly
+```sh
+$ pipenv run python searcher.py
+```
+
+Activate then run
+```sh
+$ pipenv shell
+$ python searcher.py
+```
+
+Here is the example conversation:
+```sh
+$ python searcher.py
+Using OpenAI SDK version 1.38.0
+Step 1: Createing a new Assistant with File Search Enabled
+Existing Assistant Id = asst_GJ1CHzT3EBkraKEKBjUsjQ5W
+Step 2: Uploading files and add them to a Vector Store
+Existing Vector Store Id = vs_s8keD7ReRDgpCENB5misnLDm
+Step 3: Updating the assistant to to use the new Vector Store
+The target assistant already attach the Vector Store Id vs_s8keD7ReRDgpCENB5misnLDm
+Step 4: Creating a thread
+Existing Thread Id = thread_R91ChRlyLln9hTjJREcKkUTa
+Step 4: Creating a run and check the output
+Enter a question, or type 'exit' to end: Apple được thành lập bởi những ai?
+assistant: Apple được thành lập bởi Steve Jobs, Steve Wozniak và Ronald Wayne vào tháng 4 năm 1976【11:0†source】.
+Enter a question, or type 'exit' to end: Apple được thành lập vào tháng nào năm nào?
+assistant: Apple được thành lập vào tháng 4 năm 1976【11:0†source】.
+Enter a question, or type 'exit' to end: Mục đích ban đầu của Apple là gì?
+assistant: Mục đích ban đầu của Apple khi được thành lập vào tháng 4 năm 1976 là để phát triển và bán máy tính cá nhân Apple I do Steve Wozniak thiết kế【17:2†source】.
+Enter a question, or type 'exit' to end: Apple được hợp nhất thành công ty nào vào tháng 1 năm 1977?
+assistant: Apple đã được hợp nhất thành Apple Computer, Inc. vào tháng 1 năm 1977【39:0†applekb.pdf】.
+Enter a question, or type 'exit' to end: Sản phẩm nào đã giúp Apple tăng doanh số bán máy tính nhanh chóng?
+assistant: Sản phẩm đã giúp Apple tăng doanh số bán máy tính nhanh chóng là Apple I và Apple II【43:0†applekb.pdf】.
+Enter a question, or type 'exit' to end: Apple ra mắt công chúng vào năm nào?
+assistant: Apple ra mắt công chúng vào năm 1980【21:1†applekb.pdf】.
+Enter a question, or type 'exit' to end: Apple đã giới thiệu giao diện người dùng đồ họa sáng tạo trên máy tính nào?
+assistant: Apple đã giới thiệu giao diện người dùng đồ họa sáng tạo đầu tiên trên máy tính Macintosh ban đầu vào năm 1984【49:0†applekb.pdf】.
+Enter a question, or type 'exit' to end: exit
+$
+```
+

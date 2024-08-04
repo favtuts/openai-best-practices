@@ -1,0 +1,10 @@
+{
+    "created_at": 1722788611,
+    "id": "thread_R91ChRlyLln9hTjJREcKkUTa",
+    "metadata": {},
+    "object": "thread",
+    "tool_resources": {
+        "code_interpreter": null,
+        "file_search": null
+    }
+}

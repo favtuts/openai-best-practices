@@ -1,0 +1,27 @@
+{
+    "created_at": 1722787694,
+    "description": null,
+    "id": "asst_GJ1CHzT3EBkraKEKBjUsjQ5W",
+    "instructions": "You are a documents researcher. You are a helpful and highly skilled AI assistant trained in language comprehension and summarization. Use you knowledge base to answer questions about the document provided.",
+    "metadata": {},
+    "model": "gpt-4o",
+    "name": "Documents Assistant",
+    "object": "assistant",
+    "response_format": "auto",
+    "temperature": 1.0,
+    "tool_resources": {
+        "code_interpreter": null,
+        "file_search": {
+            "vector_store_ids": [
+                "vs_s8keD7ReRDgpCENB5misnLDm"
+            ]
+        }
+    },
+    "tools": [
+        {
+            "file_search": null,
+            "type": "file_search"
+        }
+    ],
+    "top_p": 1.0
+}
