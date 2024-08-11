@@ -205,7 +205,17 @@ curl --location 'http://localhost:5000/api/v1/assistant/createthread' \
 
 # Swagger Documentation
 
-To view the API documentation through the Swagger user interface, navivate your browser to `localhost:5000/api/docs`.
+Install dependencies to support Swagger API Docs
+```sh
+# swagger api docs
+pipenv install apispec
+pipenv install apispec_webframeworks
+pipenv install marshmallow
+pipenv install flask_swagger_ui
+pipenv install openapi_spec_validator
+```
+
+To view the API documentation through the Swagger user interface, navivate your browser to `http://localhost:5000/api/docs`.
 
 
 # Refernces

@@ -9,6 +9,11 @@ python-dotenv = {extras = ["cli"], version = "*"}
 packaging = "*"
 uwsgi = "*"
 werkzeug = "*"
+apispec = "*"
+apispec-webframeworks = "*"
+marshmallow = "*"
+flask-swagger-ui = "*"
+openapi-spec-validator = "*"
 
 [dev-packages]
 
