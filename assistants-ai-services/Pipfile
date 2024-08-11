@@ -14,6 +14,8 @@ apispec-webframeworks = "*"
 marshmallow = "*"
 flask-swagger-ui = "*"
 openapi-spec-validator = "*"
+pytest = "*"
+requests = "*"
 
 [dev-packages]
 

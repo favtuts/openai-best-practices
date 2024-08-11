@@ -217,6 +217,24 @@ pipenv install openapi_spec_validator
 
 To view the API documentation through the Swagger user interface, navivate your browser to `http://localhost:5000/api/docs`.
 
+# Endpoint Unit Testing
+
+Install the `pytest` library
+```sh
+$ pipenv install pytest
+$ pipenv install requests
+```
+
+To run testing on Development
+```sh
+$ pipenv run pytest
+```
+
+To run testing on Production
+```sh
+$ pipenv run pytest --host http://localhost:8600
+```
+
 
 # Refernces
 * [Minimal Flask Application for RESTful APIs](https://github.com/matdoering/minimal-flask-example)
