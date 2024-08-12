@@ -18,6 +18,7 @@ build/
 .DS_STORE
 
 .env
+.env.*
 
 ####################
 logs/*.log

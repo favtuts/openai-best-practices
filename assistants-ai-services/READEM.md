@@ -235,6 +235,17 @@ To run testing on Production
 $ pipenv run pytest --host http://localhost:8600
 ```
 
+# Configureation 
+
+Auto detect the environment via `FLASK_ENV` variable, then dynamic loading config based on corresponding file.
+
+Install the `python-dotenv` library:
+```sh
+$ pipenv install python-dotenv[cli]
+```
 
 # Refernces
 * [Minimal Flask Application for RESTful APIs](https://github.com/matdoering/minimal-flask-example)
+* [A REST API template project developed with Python Flask](https://github.com/damianoalves/Flask-API)
+* [A Clean Architecture Practice with Flask REST API](https://github.com/chonhan/flask_restapi_clean_architecture)
+* [Production-ready REST API in Flask](https://github.com/ajoyoommen/flask-rest-api-template)

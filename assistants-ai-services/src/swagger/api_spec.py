@@ -42,3 +42,9 @@ tags = [
 for tag in tags:
     logger.debug(f"Adding tag: {tag['name']}")
     spec.tag(tag)
+    
+
+##############
+# References:
+# * https://github.com/matdoering/minimal-flask-example/blob/master/src/api_spec.py
+##############

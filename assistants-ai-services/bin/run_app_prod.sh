@@ -1,3 +1,3 @@
 #!/bin/bash
 # start the werkzeug
-pipenv run uwsgi --ini app.ini --need-app
+FLASK_ENV=production pipenv run uwsgi --ini app.ini --need-app

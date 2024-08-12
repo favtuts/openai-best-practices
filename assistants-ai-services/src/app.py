@@ -1,32 +1,50 @@
 """Flask Application"""
 
 # load libraries
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from flask import Flask, jsonify, g, session, request
 import sys
 import json
 import time
 from time import strftime
 from datetime import datetime
-
 import uuid
 from werkzeug.exceptions import HTTPException
 from werkzeug.exceptions import default_exceptions
 import traceback
-import src.utils.log_manager as log_manager
+
 
 # load modules
 from src.endpoints.blueprint_systeminfo import blueprint_systeminfo
 from src.endpoints.blueprint_assistant import blueprint_assistant
 from src.endpoints.blueprint_testing import blueprint_testing
 from src.endpoints.swagger import swagger_ui_blueprint, SWAGGER_URL
+import src.utils.log_manager as log_manager
 
 # init Flask app
 app = Flask(__name__)
-app.secret_key = "c00de22a8b1e4daa2cabc8b3f82fdb753574293f8b673f9a"
-
 app.logger.info("Staring up Flask application...")
-# init App configuratin
 
+# get the current working directory
+cwd = os.getcwd()
+app.logger.info(f"Project root directory: {cwd}")
+PROJECT_ROOT_PATH = cwd
+
+# init App configuratin
+# load_dotenv()
+environment = os.getenv("FLASK_ENV")
+app.logger.info("FLASK Environment: " + environment)
+
+dotenv_path = join(PROJECT_ROOT_PATH, f'.env.{environment}')
+app.logger.info(f"Loading configuration from file: {dotenv_path}")
+
+from .config import Config
+
+# allow Flask session data
+print(f"Secret key = {Config.FLASK_SECRET_KEY}")
+app.secret_key = Config.FLASK_SECRET_KEY
 
 # register blueprints, ensure all paths are versioned!
 app.register_blueprint(blueprint_systeminfo, url_prefix="/api/v1/systeminfo")
@@ -34,6 +52,7 @@ app.register_blueprint(blueprint_assistant, url_prefix="/api/v1/assistant")
 app.register_blueprint(blueprint_testing, url_prefix="/api/v1/testing")
 
 # register all swagger documented functions here
+app.logger.info(f"Registering Swagger API docs...")
 from src.swagger.api_spec import spec
 
 with app.test_request_context():

@@ -1,11 +1,14 @@
 """Assistants API"""
+import os
 from flask import Blueprint, jsonify, request, current_app
+from ..config import Config
 
 blueprint_assistant = Blueprint(name="blueprint_assistant", import_name=__name__)
 
 @blueprint_assistant.route('/createassistant', methods=['POST'])
-def create_assistant():    
+def create_assistant():
     current_app.logger.info("Processing /createassistant API...")
+    current_app.logger.info(f"Flask secret key: {Config.FLASK_SECRET_KEY}") 
     output = {"msg": "Assistant has been created"}
     return jsonify(output)
 
