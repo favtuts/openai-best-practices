@@ -5,6 +5,9 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from marshmallow import Schema, fields
+import src.utils.log_manager as log_manager
+
+logger = log_manager.get_logger(__name__)
 
 # create an APISpec
 spec = APISpec(
@@ -37,5 +40,5 @@ tags = [
        ]
 
 for tag in tags:
-    print(f"Adding tag: {tag['name']}")
+    logger.debug(f"Adding tag: {tag['name']}")
     spec.tag(tag)

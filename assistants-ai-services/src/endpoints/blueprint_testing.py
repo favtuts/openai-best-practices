@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 
 blueprint_testing = Blueprint(name="blueprint_testing", import_name=__name__)
 
@@ -20,6 +20,7 @@ def test():
       tags:
           - testing
     """
+    current_app.logger.info("Processing the /test API...")
     output = {"msg": "I'm the test endpoint from blueprint_testing."}
     return jsonify(output)
 
@@ -44,6 +45,7 @@ def plus_x():
       tags:
           - calculation
     """
+    current_app.logger.info("Processing the /plus API...")
     # retrieve body data from input JSON
     data = request.get_json()
     in_val = data['number']
@@ -73,10 +75,11 @@ def minus_y():
       tags:
           - calculation
     """
+    current_app.logger.info("Processing the /minus API...")
     # retrieve body data from input JSON
     data = request.get_json()
     in_val = data['number']
     # comput result and output as JSON
-    result = in_val - y
+    result = in_val - y/0
     output = {"msg": f"Your result is: '{result}'"}
     return jsonify(output)
