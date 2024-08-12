@@ -12,15 +12,57 @@ blueprint_assistant = Blueprint(name="blueprint_assistant", import_name=__name__
 @blueprint_assistant.route('/createassistant', methods=['POST'])
 def create_assistant():
     current_app.logger.info("Processing /createassistant API...")
-    current_app.logger.info(f"Flask secret key: {Config.FLASK_SECRET_KEY}") 
-    output = {"msg": "Assistant has been created"}
-    return jsonify(output)
+    #current_app.logger.info(f"Flask secret key: {Config.FLASK_SECRET_KEY}") 
+    #output = {"msg": "Assistant has been created"}
+    #return jsonify(output)
+    try:
+        data = request.get_json()
+
+        if "api_key" not in data:
+            return jsonify({"error": "API key is missing"}), 400
+
+        api_key = data["api_key"]
+        client = OpenAI(api_key=api_key)
+
+        # Create an Assistant
+        model = Config.OPENAI_MODEL_NAME
+        response = client.beta.assistants.create(
+                        model = model
+                    )
+        
+        current_app.logger.info(f"New ASSISTANT has been created with Id = {response.id}")
+        return jsonify({"assistant_id": response.id})
+
+    except Exception as e:
+        tb = traceback.format_exc()
+        current_app.logger.error('API /createassistant error: \n%s', tb)
+        return jsonify({"error": str(e)}), 500
 
 @blueprint_assistant.route('/createthread', methods=['POST'])
 def create_thread():
-    current_app.logger.info("Processing /creathread API...")
-    output = {"msg": "Thread has been created"}
-    return jsonify(output)
+    current_app.logger.info("Processing /createhread API...")
+    #output = {"msg": "Thread has been created"}
+    #return jsonify(output)
+    
+    try:
+        data = request.get_json()
+
+        if "api_key" not in data:
+            return jsonify({"error": "API key is missing"}), 400
+
+        api_key = data["api_key"]
+        client = OpenAI(api_key=api_key)
+
+        # Create a Thread
+        my_thread = client.beta.threads.create()
+        
+        current_app.logger.info(f"New THREAD has been created with Id = {my_thread.id}")
+        return jsonify({"thread_id": my_thread.id})
+
+    except Exception as e:
+        tb = traceback.format_exc()
+        current_app.logger.error('API /createthread error: \n%s', tb)
+        return jsonify({"error": str(e)}), 500
 
 @blueprint_assistant.route('/ask', methods=['POST'])
 def ask_question():
