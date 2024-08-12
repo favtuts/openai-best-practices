@@ -40,7 +40,7 @@ def ask_question():
 
         thread_id =  data["thread_id"]
 
-        question = data["question"]
+        question = data["question"]        
     except Exception as e:
         tb = traceback.format_exc()
         current_app.logger.error('L1 /ask error: \n%s', tb)
@@ -57,12 +57,13 @@ def ask_question():
         # )
         # return jsonify({"answer": response.choices[0].message.content})
 
-        # Using Threads Messages - Conversation Based
+        # Using Threads Messages - Conversation Based        
         my_thread_message = client.beta.threads.messages.create(
             thread_id = thread_id,
             role = "user",
             content = question,
         )
+        current_app.logger.info(f"New MESSAGE has been created with Id = {my_thread_message.id} on THREAD Id ={thread_id}")
 
         # Count input tokens
         model = Config.OPENAI_MODEL_NAME
@@ -76,6 +77,7 @@ def ask_question():
             assistant_id = assistant_id,
             instructions = "Emteller Chatbot. Xin chào bạn!"
         )
+        current_app.logger.info(f"New RUN has been created with Id = {my_run.id} on THREAD Id = {thread_id} and ASSISTANT Id = {assistant_id}")
 
         # Monitor the assistant and report status
         while my_run.status != "completed":
@@ -84,7 +86,7 @@ def ask_question():
                 run_id=my_run.id
                 )
             
-            current_app.logger.info(f"Run status: {my_run.status}")            
+            current_app.logger.info(f"My run {my_run.id} has status: {my_run.status}")
             if my_run.status == "failed" :
                 break
 
