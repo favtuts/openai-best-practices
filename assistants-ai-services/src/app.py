@@ -47,9 +47,9 @@ print(f"Secret key = {Config.FLASK_SECRET_KEY}")
 app.secret_key = Config.FLASK_SECRET_KEY
 
 # register blueprints, ensure all paths are versioned!
-app.register_blueprint(blueprint_systeminfo, url_prefix="/api/v1/systeminfo")
-app.register_blueprint(blueprint_assistant, url_prefix="/api/v1/assistant")
-app.register_blueprint(blueprint_testing, url_prefix="/api/v1/testing")
+app.register_blueprint(blueprint_systeminfo, url_prefix="/api/v2/systeminfo")
+app.register_blueprint(blueprint_assistant, url_prefix="/api/v2/assistant")
+app.register_blueprint(blueprint_testing, url_prefix="/api/v2/testing")
 
 # register all swagger documented functions here
 app.logger.info(f"Registering Swagger API docs...")
