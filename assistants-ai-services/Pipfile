@@ -16,6 +16,7 @@ flask-swagger-ui = "*"
 openapi-spec-validator = "*"
 pytest = "*"
 requests = "*"
+tiktoken = "*"
 
 [dev-packages]
 

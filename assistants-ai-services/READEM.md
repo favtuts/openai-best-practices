@@ -244,6 +244,20 @@ Install the `python-dotenv` library:
 $ pipenv install python-dotenv[cli]
 ```
 
+
+# Count tokens with Tiktoken
+* https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken
+
+Install `tiktoken`
+```sh
+$ pipenv install tiktoken
+```
+
+If you need to install the latest version
+```sh
+$ pipenv update tiktoken 
+```
+
 # Refernces
 * [Minimal Flask Application for RESTful APIs](https://github.com/matdoering/minimal-flask-example)
 * [A REST API template project developed with Python Flask](https://github.com/damianoalves/Flask-API)

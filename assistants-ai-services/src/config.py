@@ -10,5 +10,8 @@ dotenv_path = join(PROJECT_ROOT_PATH, f'.env.{environment}')
 load_dotenv(dotenv_path)
 
 class Config(object):
-    FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')    
+    FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+    
+    OPENAI_MODEL_NAME = os.getenv('OPENAI_MODEL_NAME')
+    
     APPLICATION_ROOT = "/api"
