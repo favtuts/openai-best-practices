@@ -2,12 +2,59 @@
 import os
 from flask import Blueprint, jsonify, request, current_app
 from ..config import Config
-
+from ..utils import dict_helper
 from openai import OpenAI
 import tiktoken
 import traceback
 
 blueprint_assistant = Blueprint(name="blueprint_assistant", import_name=__name__)
+
+@blueprint_assistant.route('/retrieveassistant', methods=['POST'])
+def retrieve_assistant():
+    current_app.logger.info("Processing /retrieve API...")    
+    
+    try:
+        data = request.get_json()
+
+        if "api_key" not in data:
+            return jsonify({"error": "API key is missing"}), 400
+
+        api_key = data["api_key"]
+        client = OpenAI(api_key=api_key)
+
+        # Retrieve an Assistant Object
+        assistant_id = data["assistant_id"]
+        assistant_response = client.beta.assistants.retrieve(assistant_id=assistant_id)
+        
+        # Extract the vector_store_id from Assistant Object
+        assistant_model = assistant_response.model_dump()
+        
+        vector_store_ids = dict_helper.deep_get(assistant_model, ['tool_resources', 'file_search', 'vector_store_ids'], default=None)
+        vector_store_id = vector_store_ids[0] if vector_store_ids is not None and len(vector_store_ids) > 0 else None
+        
+        # Checking FileSearch is enabled
+        file_search_enabled = False
+        tools_list = dict_helper.deep_get(assistant_model, ['tools'], default=None)
+        if tools_list is not None and len(tools_list) > 0:
+            for tool_item in tools_list:
+                tool_type = dict_helper.deep_get(tool_item, ['type'], default="")
+                if tool_type == "file_search":
+                    file_search_enabled = True
+                    break          
+        
+        current_app.logger.info(f"Returned Assistant object \n{assistant_model}")
+        return jsonify(
+            {
+                "assistant_object": assistant_response.model_dump(),
+                "vector_store_id": vector_store_id,
+                "file_search_enabled": file_search_enabled
+            }
+        )
+
+    except Exception as e:
+        tb = traceback.format_exc()
+        current_app.logger.error('API /retrieve error: \n%s', tb)
+        return jsonify({"error": str(e)}), 500    
 
 @blueprint_assistant.route('/createassistant', methods=['POST'])
 def create_assistant():
