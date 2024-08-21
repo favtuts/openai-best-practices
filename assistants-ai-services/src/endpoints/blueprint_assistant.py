@@ -6,6 +6,7 @@ from ..utils import dict_helper
 from openai import OpenAI
 import tiktoken
 import traceback
+import re
 
 blueprint_assistant = Blueprint(name="blueprint_assistant", import_name=__name__)
 
@@ -82,7 +83,8 @@ def build_assistant():
             current_app.logger.info(f"No files to clean on Vector Store {vector_store_id}")                        
         
         # Upload a file with an "assistants" purpose
-        # Ready the files for upload to OpenAI        
+        # Ready the files for upload to OpenAI
+        current_app.logger.debug(f"Opening file streams for {file_paths}")
         file_streams = [open(path, "rb") for path in file_paths]
         
         # Use the upload and poll SDK helper to upload the files, add them to the vector store,
@@ -387,14 +389,21 @@ def ask_question_l22():
             else:
                 break
 
-        output_tokens = encoding.encode(all_messages.data[0].content[0].text.value)
+        reply_message = all_messages.data[0].content[0].text.value
+        
+        output_tokens = encoding.encode(reply_message)
         output_token_count = len(output_tokens)
+
+        # Clean 
+        # https://community.openai.com/t/what-are-n-source-in-openais-assistant-api-response/513857/10
+        regex_pattern = r"【.*?】"
+        reply_message_cleaned = re.sub(regex_pattern, '', reply_message)
 
         json_data = {
             "input_token_count" : input_token_count,
             "output_token_count" : output_token_count,
             "assistantID": assistant_id,
-            "answer": all_messages.data[0].content[0].text.value
+            "answer": reply_message_cleaned
         }        
 
         # 2nd solution
