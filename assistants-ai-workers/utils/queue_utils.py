@@ -220,9 +220,10 @@ class ProcessQueue:
             task_type = "retrieval"
 
             try:
-                if self.assistantID == "":
-                    # TVT Fixed: 20240812
-                    self.client = OpenAI(api_key=self.api_key)
+                # TVT Fixed: 20240812
+                self.client = OpenAI(api_key=self.api_key)
+                
+                if self.assistantID == "":                       
                     # Create assistant ID
                     assistantName = f"Created_assistant_{self.botName}"
                     response = self.client.beta.assistants.create(
@@ -240,7 +241,10 @@ class ProcessQueue:
                 print(f"Error when creating assistantId: \n{tb}")
                 raise
 
-            self.intent_file = os.path.join(os.environ['INTENT_STORE'], self.assistantID)
+            # TVT Fixed: 20240815
+            # Generate intent_file with TXT extension
+            self.intent_file = os.path.join(os.environ['INTENT_STORE'], self.assistantID + ".txt")
+            
             if os.path.exists(self.intent_file):
                 os.remove(self.intent_file)
 
@@ -419,29 +423,58 @@ class ProcessQueue:
           
                 # 4. Upload a file with an "assistants" purpose
                 # Ready the files for upload to OpenAI                
-                file_paths = [self.intent_file]
-                file_streams = [open(path, "rb") for path in file_paths]
-                
+
                 # Use the upload and poll SDK helper to upload the files, add them to the vector store,
-                # and poll the status of the file batch for completion.
-                print(f"Uploading files to Vector Store {vector_store_id}...")
-                file_batch = self.client.beta.vector_stores.file_batches.upload_and_poll(
-                    vector_store_id=vector_store_id, files=file_streams
+                # and poll the status of the file batch for completion.                
+                
+                # currently the upload_and_poll not WORK
+                # file_paths = [self.intent_file]
+                # print(f"Uploading files {file_paths} to Vector Store {vector_store_id}...")
+                # file_streams = [open(path, "rb") for path in file_paths]
+                # file_batch = self.client.beta.vector_stores.file_batches.upload_and_poll(
+                #     vector_store_id=vector_store_id, files=file_streams
+                # )
+                
+                print(f"Uploading intent file with assistants purpose...\n{self.intent_file}.")
+                my_file = self.client.files.create(
+                    file=open(self.intent_file, "rb"),
+                    purpose='assistants'
                 )
-                print(f"Uploaded {file_batch.file_counts} files to Vector Store {vector_store_id}...\n{file_batch}")
+                print(f"Uploading file {my_file.id} to Vector Store {vector_store_id}...")
+                file_batch = self.client.beta.vector_stores.file_batches.create(
+                    vector_store_id=vector_store_id,
+                    file_ids=[my_file.id]
+                    )
+                
+                # monitor the file batch status
+                is_file_uploaded = False
+                while file_batch.status != "completed":
+                    file_batch = self.client.beta.vector_stores.file_batches.retrieve(
+                        batch_id=file_batch.id, 
+                        vector_store_id=vector_store_id
+                        )
+                    
+                    print(f"My batch file {file_batch.id} has status: {file_batch.status}")
+                    if file_batch.status == "failed" :
+                        break
+                
+                print(f"Uploaded files to Vector Store {vector_store_id} with status: {file_batch.schema_json}\n{file_batch}")
                 
                 # 5. Update knowledge file
-                # To make the files accessible to your assistant, 
-                # update the assistant’s tool_resources with the new vector_store id.
-                assistant_name = f"Created_assistant_{self.botName}"
-                attached_assistant = self.client.beta.assistants.update(
-                    name=assistant_name,
-                    assistant_id=self.assistantID,
-                    tool_resources={"file_search": {"vector_store_ids": [vector_store_id]}},
-                    tools=[{"type": "file_search"}],
-                )            
-                print(f"Update knowledge file success {attached_assistant}")
-                                
+                if file_batch.status == "failed":
+                    print(f"Failed to update files to Vector Store")
+                else:                    
+                    # To make the files accessible to your assistant, 
+                    # update the assistant’s tool_resources with the new vector_store id.
+                    assistant_name = f"Created_assistant_{self.botName}"
+                    attached_assistant = self.client.beta.assistants.update(
+                        name=assistant_name,
+                        assistant_id=self.assistantID,
+                        tool_resources={"file_search": {"vector_store_ids": [vector_store_id]}},
+                        tools=[{"type": "file_search"}],
+                    )
+                    print(f"Update knowledge file success on Assistant: {attached_assistant.id}\n{attached_assistant}")
+                
             except Exception as e:
                 tb = traceback.format_exc()
                 print(f"Fail to update knowledge file \n{tb}")
