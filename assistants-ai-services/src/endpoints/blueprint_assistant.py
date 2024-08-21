@@ -9,9 +9,113 @@ import traceback
 
 blueprint_assistant = Blueprint(name="blueprint_assistant", import_name=__name__)
 
+@blueprint_assistant.route('/buildassistant', methods=['POST'])
+def build_assistant():
+    current_app.logger.info("Processing /buildassistant API...")
+    try:
+        data = request.get_json()
+
+        if "api_key" not in data:
+            return jsonify({"error": "API key is missing"}), 400
+        
+        api_key = data["api_key"]
+        client = OpenAI(api_key=api_key)
+        
+        
+        assistant_id = data["assistant_id"]
+        bot_name = data["bot_name"]
+        pre_prompt = data["pre_prompt"]
+        file_paths = data["file_paths"]
+        
+        # Create new assistant if ID is not provided
+        if assistant_id is None or assistant_id == "":            
+            current_app.logger.info(f"Creating new Assistant for bot name: {bot_name}...")
+            assistant_name = f"Created_assistant_{bot_name}"
+            model = Config.OPENAI_MODEL_NAME
+            created_assistant_response = client.beta.assistants.create(
+                name=assistant_name,
+                model=model, 
+                instructions=pre_prompt,               
+                tools=[{"type": "file_search"}],
+            )
+            assistant_id = created_assistant_response.id
+            current_app.logger.info(f"New Assistant has been created with ID: {assistant_id}")
+        
+        # Retrieve an Assistant Object
+        retrieved_assistant_response = client.beta.assistants.retrieve(assistant_id=assistant_id)
+        if retrieved_assistant_response is None:
+            return jsonify({"error": f"Not found Assistant {ascii}"}), 400
+        
+        # Extract the vector_store_id attached to the assistant
+        vector_store_id = None
+        assistant_model = retrieved_assistant_response.model_dump()
+        vector_store_list = dict_helper.deep_get(assistant_model, ['tool_resources', 'file_search', 'vector_store_ids'], default=None)
+        vector_store_id = vector_store_list[0] if vector_store_list is not None and len(vector_store_list) > 0 else None
+        
+        if vector_store_id is None:
+            # create new Vector Store if not found in the assistant
+            current_app.logger.info(f"Assistant {assistant_id} has no Vectore Store, creating new Vector Store object...")
+            new_vector_store = client.beta.vector_stores.create()
+            vector_store_id = new_vector_store.id
+            current_app.logger.info(f"New Vector Store is created with ID = {vector_store_id}")
+        
+        # Clean old files in Vector Store
+        vector_store_files_response = client.beta.vector_stores.files.list(vector_store_id=vector_store_id)       
+        vector_store_files_list = dict_helper.deep_get(vector_store_files_response.model_dump(), ['data'], default=None)
+        current_app.logger.debug(f"List of files on Vector Store {vector_store_id}: \n{vector_store_files_list}")
+        if vector_store_files_list is not None and len(vector_store_files_list) > 0:
+            
+            for file_item in vector_store_files_list:
+                file_id = dict_helper.deep_get(file_item, ['id'], default=None)
+                current_app.logger.debug(f"Processing to remove File {file_id} from Vector Store {vector_store_id}")
+                if file_id is not None:
+                    # Remove the file from Vector Store
+                    current_app.logger.debug(f"Removing File {file_id} from Vector Store {vector_store_id}")
+                    client.beta.vector_stores.files.delete(file_id=file_id, vector_store_id=vector_store_id)
+                    
+                    # Delete the file from File Storage
+                    current_app.logger.debug(f"Deleting File {file_id} from File Storage")                                    
+                    client.files.delete(file_id=file_id)
+                    
+            current_app.logger.info(f"Cleaned {len(vector_store_files_list)} files on Vector Store {vector_store_id}")
+        else:
+            current_app.logger.info(f"No files to clean on Vector Store {vector_store_id}")                        
+        
+        # Upload a file with an "assistants" purpose
+        # Ready the files for upload to OpenAI        
+        file_streams = [open(path, "rb") for path in file_paths]
+        
+        # Use the upload and poll SDK helper to upload the files, add them to the vector store,
+        # and poll the status of the file batch for completion.        
+        current_app.logger.info(f"Uploading files to Vector Store {vector_store_id}...")
+        file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
+            vector_store_id=vector_store_id, files=file_streams
+        )        
+        current_app.logger.info(f"Uploaded {file_batch.file_counts} files to Vector Store {vector_store_id}...\n{file_batch}")
+        
+        # Update knowledge file
+        # To make the files accessible to your assistant, 
+        # update the assistant’s tool_resources with the new vector_store id.
+        assistant_name = f"Created_assistant_{bot_name}"
+        updated_assistant_response = client.beta.assistants.update(
+            name=assistant_name,
+            assistant_id=assistant_id,
+            instructions=pre_prompt,
+            tool_resources={"file_search": {"vector_store_ids": [vector_store_id]}},
+            tools=[{"type": "file_search"}],
+        )
+        current_app.logger.info(f"Updated the Assistant {assistant_id} with Vector Store {vector_store_id}\n{updated_assistant_response}")
+        
+        return jsonify(updated_assistant_response.model_dump()), 200
+        
+    except Exception as e:
+        tb = traceback.format_exc()
+        current_app.logger.error('API /buildassistant error: \n%s', tb)
+        return jsonify({"error": str(e)}), 500
+
 @blueprint_assistant.route('/retrieveassistant', methods=['POST'])
 def retrieve_assistant():
-    current_app.logger.info("Processing /retrieve API...")    
+    current_app.logger.info("Processing /retrieve API...")
     
     try:
         data = request.get_json()
@@ -40,7 +144,7 @@ def retrieve_assistant():
                 tool_type = dict_helper.deep_get(tool_item, ['type'], default="")
                 if tool_type == "file_search":
                     file_search_enabled = True
-                    break          
+                    break
         
         current_app.logger.info(f"Returned Assistant object \n{assistant_model}")
         return jsonify(
@@ -54,7 +158,7 @@ def retrieve_assistant():
     except Exception as e:
         tb = traceback.format_exc()
         current_app.logger.error('API /retrieve error: \n%s', tb)
-        return jsonify({"error": str(e)}), 500    
+        return jsonify({"error": str(e)}), 500
 
 @blueprint_assistant.route('/createassistant', methods=['POST'])
 def create_assistant():

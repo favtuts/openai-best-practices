@@ -1,0 +1,16 @@
+[Unit]
+Description=EMTELLER ASSISTANT WORKERs
+After=syslog.target network.target
+[Service]
+User=nsd
+Type=forking
+
+WorkingDirectory=/emteller/assistant-worker
+ExecStart=/usr/bin/bash /emteller/assistant-worker/bin/run_app_prod.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+SuccessExitStatus=143
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
