@@ -7,4 +7,5 @@ All examples and practices of OpenAI Platform
 * [Assistants API Quickstart](./assistants-api-quickstart/README.md)
 * [Smith Solar Assistants](./assistants-solar-salesrep/README.md)
 * [Apple Chatbot Assistants](./assistants-apple-chatbot/README.md)
-* [Assistant File Search QuickStart](/assistants-file-search/)
+* [Assistant File Search QuickStart](./assistants-file-search/README.md)
+* [Assistant Company Policy Explainer](./assistants-policy-explainer/README.md)

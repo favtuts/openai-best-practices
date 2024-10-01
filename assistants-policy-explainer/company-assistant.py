@@ -19,11 +19,13 @@ client = OpenAI(
     api_key=openai_apikey,
 )
 
-
 assistant_file = "saved/assistant.json"
 vector_store_file = "saved/vector_store.json"
 thread_file = "saved/thread.json"
-starting_model = "gpt-4o"
+files_file = "saved/files.json"
+
+# starting_model = "gpt-4o"
+starting_model = "gpt-3.5-turbo"
 
 def write_dictionary(my_dict, filename):
     # Overwrite the whole content
@@ -37,6 +39,8 @@ def read_dictionary(filename):
         dict_data = json.load(outfile)
     return dict_data
 
+
+# Create the assistant
 def create_assistant():
     starting_assistant_id = ""
     assistant_dict = read_dictionary(assistant_file)
@@ -47,8 +51,8 @@ def create_assistant():
     if starting_assistant_id == "":
         # create new assistant with file search enabled
         my_assistant = client.beta.assistants.create(
-            name="Documents Assistant",
-            instructions="You are a documents researcher. You are a helpful and highly skilled AI assistant trained in language comprehension and summarization. Use your knowledge base to answer questions about the document provided.",            
+            name="Policy Explainer",
+            instructions="You answer questions about company rules based on your knowledge of the company policy files.",
             tools=[{"type": "file_search"}],        
             model=starting_model,
         )        
@@ -56,15 +60,14 @@ def create_assistant():
         
         # save new assistant id to file for loading in the next time
         write_dictionary(my_assistant.model_dump(), assistant_file)
-        print(f"Saved the Assistant ID = {my_assistant.id}")  # Debugging line            
+        print(f"Saved the Assistant ID = {my_assistant.id}")  # Debugging line 
     else:
         # retrieve assistant if it has been already created
         my_assistant = client.beta.assistants.retrieve(starting_assistant_id)
     
     return my_assistant
 
-
-
+# Create a vector store
 def create_vector_store(file_paths):
     starting_vector_store_id = ""
     vector_store_dict = read_dictionary(vector_store_file)
@@ -74,11 +77,12 @@ def create_vector_store(file_paths):
         print(f"Existing Vector Store Id = {starting_vector_store_id}")  # Debugging line
             
     if starting_vector_store_id == "":
-        # Create a vector store
-        my_vector_store = client.beta.vector_stores.create(name="Document Statements")        
+        # Create a vector store caled "Company Policies"
+        my_vector_store = client.beta.vector_stores.create(name="Company Policies")
         print(f"New vector store is created with id = {my_vector_store.id}")  # Debugging line
         
         print(f"Uploading files to Vector Store: {my_vector_store.id}")  # Debugging line
+        
         # Ready the files for upload to OpenAI
         # file_paths = ["upload/file1.pdf", "upload/file2.txt"]
         file_streams = [open(path, "rb") for path in file_paths]
@@ -105,6 +109,41 @@ def create_vector_store(file_paths):
     return my_vector_store
 
 
+# Save uploaded files on specific vector store
+def save_uploaded_files(vector_store_id):
+    # retrieve file list of vector store
+    my_vs_files = client.beta.vector_stores.files.list(vector_store_id)
+    
+    # save to files
+    if my_vs_files != None:
+        write_dictionary(my_vs_files.model_dump(), files_file)
+
+
+# Add a new file to the vector store. Note, you don't need to update the assistant again
+# as it's referring to the vector store id which has not changed.
+def add_new_file_to_vector_store(vector_store_id, adding_file_path):
+    adding_file_stream = open(adding_file_path, "rb")
+    
+    # Use the upload and poll SDK helper to upload the files, add them to the vector store,
+    # and poll the status of the file batch for completion.
+    adding_file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
+        vector_store_id=vector_store_id, files=[adding_file_stream]
+    )
+    
+    print(f"Added {adding_file_batch.file_counts} files to Vector Store: {vector_store_id} with status: {adding_file_batch.status}")  # Debugging line
+    
+    # Retrieve vector store again after uploading files
+    adding_vector_store = client.beta.vector_stores.retrieve(vector_store_id)
+    
+    # save new vector store file for loading in the next time
+    write_dictionary(adding_vector_store.model_dump(), vector_store_file)
+    print(f"Saved the Vector Store ID = {adding_vector_store.id}")  # Debugging line
+    
+    # save uploaded files
+    save_uploaded_files(vector_store_id)
+    
+
+
 def attach_vector_store_to_assistant(target_assistant, vector_store_id):            
     # Check if the assistant is already attached the Vector Store Id
     if vector_store_id in target_assistant.tool_resources.file_search.vector_store_ids:
@@ -122,6 +161,7 @@ def attach_vector_store_to_assistant(target_assistant, vector_store_id):
     print(f"Saved the Assistant ID = {attached_assistant.id}")  # Debugging line
         
     return attached_assistant
+
 
 def create_thread():
     starting_thead_id = ""
@@ -172,8 +212,7 @@ def run_assistant(message_body, thread_id, assistant_id):
     # Run the existing assistant on the existing thread
     run = client.beta.threads.runs.create(
         thread_id=thread_id,
-        assistant_id=assistant_id,
-               
+        assistant_id=assistant_id,               
     )
     
     print("Created run: ")
@@ -225,8 +264,9 @@ def main():
     # Step 2: Upload files and add them to a Vector Store
     print(f"Step 2: Uploading files and add them to a Vector Store")  # Debugging line    
     
-    file_paths = ["uploads/applekb.pdf"]
+    file_paths = ["uploads/company-policy.md"]
     my_vector_store = create_vector_store(file_paths)
+    save_uploaded_files(my_vector_store.id)
     
     # Step 3: Update the assistant to to use the new Vector Store
     print(f"Step 3: Updating the assistant to to use the new Vector Store")  # Debugging line    

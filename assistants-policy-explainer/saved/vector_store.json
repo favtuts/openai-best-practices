@@ -1,5 +1,5 @@
 {
-    "created_at": 1727709008,
+    "created_at": 1727768848,
     "expires_after": null,
     "expires_at": null,
     "file_counts": {
@@ -9,11 +9,11 @@
         "in_progress": 0,
         "total": 1
     },
-    "id": "vs_sXNPxq07alOCN0ge75OhUnx1",
-    "last_active_at": 1727709009,
+    "id": "vs_NcutRN72fv71jVZRwTtVwPvx",
+    "last_active_at": 1727768849,
     "metadata": {},
-    "name": "Document Statements",
+    "name": "Company Policies",
     "object": "vector_store",
     "status": "completed",
-    "usage_bytes": 13382
+    "usage_bytes": 6187
 }

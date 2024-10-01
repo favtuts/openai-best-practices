@@ -1,0 +1,33 @@
+{
+    "created_at": 1727768848,
+    "description": null,
+    "id": "asst_YKZmZCpk6f7v4GWIypo7bslE",
+    "instructions": "You answer questions about company rules based on your knowledge of the company policy files.",
+    "metadata": {},
+    "model": "gpt-3.5-turbo",
+    "name": "Policy Explainer",
+    "object": "assistant",
+    "response_format": "auto",
+    "temperature": 1.0,
+    "tool_resources": {
+        "code_interpreter": null,
+        "file_search": {
+            "vector_store_ids": [
+                "vs_NcutRN72fv71jVZRwTtVwPvx"
+            ]
+        }
+    },
+    "tools": [
+        {
+            "file_search": {
+                "max_num_results": null,
+                "ranking_options": {
+                    "ranker": "default_2024_08_21",
+                    "score_threshold": 0.0
+                }
+            },
+            "type": "file_search"
+        }
+    ],
+    "top_p": 1.0
+}
