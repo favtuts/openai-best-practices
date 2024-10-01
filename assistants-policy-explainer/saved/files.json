@@ -8,6 +8,22 @@
                 },
                 "type": "static"
             },
+            "created_at": 1727773325,
+            "id": "file-FGY5Zsh2uI0yKmiXBeTSiB8x",
+            "last_error": null,
+            "object": "vector_store.file",
+            "status": "completed",
+            "usage_bytes": 4592,
+            "vector_store_id": "vs_NcutRN72fv71jVZRwTtVwPvx"
+        },
+        {
+            "chunking_strategy": {
+                "static": {
+                    "chunk_overlap_tokens": 400,
+                    "max_chunk_size_tokens": 800
+                },
+                "type": "static"
+            },
             "created_at": 1727768850,
             "id": "file-QMvnhiRSRhwMnzofVmXSAXGn",
             "last_error": null,
@@ -17,7 +33,7 @@
             "vector_store_id": "vs_NcutRN72fv71jVZRwTtVwPvx"
         }
     ],
-    "first_id": "file-QMvnhiRSRhwMnzofVmXSAXGn",
+    "first_id": "file-FGY5Zsh2uI0yKmiXBeTSiB8x",
     "has_more": false,
     "last_id": "file-QMvnhiRSRhwMnzofVmXSAXGn",
     "object": "list"

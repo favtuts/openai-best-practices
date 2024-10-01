@@ -117,11 +117,13 @@ def save_uploaded_files(vector_store_id):
     # save to files
     if my_vs_files != None:
         write_dictionary(my_vs_files.model_dump(), files_file)
+        print(f"Saved the uploaded files of Vectore store: {vector_store_id}")  # Debugging line
 
 
 # Add a new file to the vector store. Note, you don't need to update the assistant again
 # as it's referring to the vector store id which has not changed.
 def add_new_file_to_vector_store(vector_store_id, adding_file_path):
+    print(f"Adding file {adding_file_path} to Vector Store {vector_store_id}")
     adding_file_stream = open(adding_file_path, "rb")
     
     # Use the upload and poll SDK helper to upload the files, add them to the vector store,
@@ -267,6 +269,10 @@ def main():
     file_paths = ["uploads/company-policy.md"]
     my_vector_store = create_vector_store(file_paths)
     save_uploaded_files(my_vector_store.id)
+    
+    
+    # Step 2.1: Add new PDF file for updating PET Polices knowledge base.    
+    add_new_file_to_vector_store(my_vector_store.id, "uploads/health-and-safety-policy.pdf")
     
     # Step 3: Update the assistant to to use the new Vector Store
     print(f"Step 3: Updating the assistant to to use the new Vector Store")  # Debugging line    

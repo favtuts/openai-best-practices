@@ -91,3 +91,11 @@ Here is the first uploaded file `company-policy.md` conversation:
 Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
 assistant: Based on the company policy documents uploaded, there is no specific mention of bringing pets, including cats, into the office. The policy mainly focuses on areas like respect and professionalism, attendance, health and safety, environmental sustainability, operational procedures, employee development, conduct outside the workplace, disciplinary actions, and policy amendments. There isn't a direct rule regarding pets in the office in the provided policy documents【4:0†source】【4:1†source】. If you are considering bringing your cat to the office, you may want to consult with HR or a supervisor to inquire about any specific pet policies that may exist.
 ```
+
+We continue updating PET Policies into the knowledge base of the Assistant:
+```bash
+Adding file uploads/health-and-safety-policy.pdf to Vector Store vs_NcutRN72fv71jVZRwTtVwPvx
+Added FileCounts(cancelled=0, completed=1, failed=0, in_progress=0, total=1) files to Vector Store: vs_NcutRN72fv71jVZRwTtVwPvx with status: completed
+Saved the Vector Store ID = vs_NcutRN72fv71jVZRwTtVwPvx
+Saved the uploaded files of Vectore store: vs_NcutRN72fv71jVZRwTtVwPvx
+```
