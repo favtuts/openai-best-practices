@@ -161,3 +161,30 @@ assistant: Based on the Specialty Cakes Facility Health and Safety Policy, pets 
 Enter a question, or type 'exit' to end: CR7 là ai?
 assistant: Cristiano Ronaldo, thường được viết tắt là CR7, là một cầu thủ bóng đá nổi tiếng người Bồ Đào Nha. Anh được biết đến với khả năng chơi bóng đỉnh cao và đã giành nhiều giải thưởng danh giá trong sự nghiệp của mình. Ngoài sự nghiệp trong bóng đá, Cristiano Ronaldo cũng là một nhân vật quảng cáo nổi tiếng. Nếu bạn cần thêm thông tin hoặc có bất kỳ câu hỏi nào khác, đừng ngần ngại để lại cho tôi biết.
 ```
+
+
+# Update new prompt for the Assistant
+
+New instructions
+```bash
+You are Policy Explainer. Your primary role is to provide accurate and sourced information about company policy rules.  You answer questions about company rules based on your knowledge of the company policy files. Rely solely on the information in the files you have; do not use external knowledge. If the information is not in the files, respond with "Sorry I cannot help with that".
+```
+
+Chat conversation
+```bash
+Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
+assistant: Based on the information from the Specialty Cakes Facility Health and Safety Policy, pets are allowed in the facility under certain conditions. However, this information specifically pertains to a facility, and office rules may vary. It is advisable to check with your office's specific pet policy to determine if bringing a pet cat into the office is allowed and what conditions or restrictions may apply.
+
+Enter a question, or type 'exit' to end: Các báo cáo tài chính?
+assistant: Xin lỗi vì sự hiểu lầm trước đó. Tôi sẽ tìm kiếm thông tin về "báo cáo tài chính" trong tài liệu. Vui lòng đợi một chút.
+assistant: The search for "financial reports" did not return relevant information in the uploaded files. If you need specific details about financial reports, feel free to provide more context or ask any other questions you may have.
+
+Enter a question, or type 'exit' to end: Các báo cáo tài chính?
+assistant: Từ tìm kiếm "financial reports" không trả về thông tin cụ thể trong các tài liệu đã tải lên. Nếu bạn cần thông tin chi tiết về các báo cáo tài chính, vui lòng cung cấp thêm ngữ cảnh hoặc đặt câu hỏi cụ thể để tôi hỗ trợ bạn.
+
+Enter a question, or type 'exit' to end: Tổng thống Hoa Kỳ là ai?.
+assistant: Tổng thống Hoa Kỳ hiện tại là Joe Biden. Nếu có câu hỏi hoặc cần thông tin khác, đừng ngần ngại để lại cho tôi biết.
+
+Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
+assistant: Dựa trên thông tin từ Chính sách An toàn và Sức khỏe của Cơ sở Bánh đặc biệt, việc mang thú cưng vào cơ sở là được phép dưới một số điều kiện. Chỉ những thú cưng hành vi tốt, khỏe mạnh và đã tiêm phòng mới được phép. Thú cưng phải được giám sát mọi lúc, giữ trên dây dắt hoặc trong túi vận chuyển, và không được phép vào khu vực chuẩn bị thực phẩm hoặc lưu trữ thực phẩm. Chủ nhân chịu trách nhiệm vệ sinh sau thú cưng, đảm bảo chúng sạch sẽ và không bị ký sinh trùng, và kiểm soát bất kỳ hành vi hung dữ nào. Vi phạm chính sách về thú cưng có thể dẫn đến hậu quả kỷ luật hoặc bị xóa khỏi cơ sở【4:0†source】. Đề nghị kiểm tra chính sách thú cưng cụ thể của văn phòng để xác định liệu việc mang mèo cưng vào văn phòng có được phép không và các điều kiện hoặc hạn chế áp dụng.
+```
