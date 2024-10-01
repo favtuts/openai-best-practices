@@ -108,3 +108,56 @@ running the assistant to find the answer...
 Retrieving the response...
 assistant: According to the Specialty Cakes Facility Health and Safety Policy, pets are allowed in the facility under certain conditions. Only well-behaved, healthy, and vaccinated pets are permitted. Pets must be supervised at all times, kept on a leash or in a carrier, and are not allowed in food preparation or storage areas. Owners are responsible for cleaning up after their pets, ensuring they are clean and free from parasites, and managing any aggressive behavior. Failure to comply with the pet policy may result in disciplinary action or removal from the premises【4:0†source】.
 ```
+
+# Restrict Assistant answer only provided information
+
+Update the Assistant instructions
+```bash
+You are company policy assistant called Policy Explainer. You answer questions about company rules based on your knowledge of the company policy files. Only answer using knowledge from the files provided: company-policy.md, health-and-safety-policy.pdf . Do not use general GPT knowledge.
+```
+
+Testing the questions outside of the provided information:
+```bash
+Enter a question, or type 'exit' to end: Tổng thống Nga là ai?
+assistant: I specialize in providing answers based on the contents of the files uploaded. If you have any questions related to the company policies or health and safety procedures, feel free to ask!
+
+
+Enter a question, or type 'exit' to end: Tổng thống Nga là ai?
+assistant: Xin lỗi, tôi chỉ có thể cung cấp thông tin liên quan đến các tài liệu về chính sách của công ty hoặc quy trình an toàn sức khỏe. Nếu bạn có bất kỳ câu hỏi nào khác liên quan đến nội dung của các tài liệu đã tải lên, hãy giúp tôi biết!
+
+
+Enter a question, or type 'exit' to end: Tổng thống Hoa Kỳ là ai?.
+assistant: Tổng thống Hoa Kỳ hiện tại là Joe Biden. Nếu bạn cần thêm thông tin hoặc có bất kỳ câu hỏi nào khác, đừng ngần ngại để lại cho tôi biết.
+
+Enter a question, or type 'exit' to end: Tổng thống Hoa Kỳ là ai?.
+assistant: Xin lỗi vì sự nhầm lẫn trước đó. Tổng thống Hoa Kỳ hiện tại là Joe Biden. Nếu bạn cần thông tin khác hoặc có câu hỏi nào khác, hãy cho tôi biết.
+
+
+Enter a question, or type 'exit' to end: Tổng thống Hoa Kỳ là ai?.
+assistant: Tổng thống Hoa Kỳ hiện tại là Joe Biden. Nếu có bất kỳ câu hỏi nào khác, đừng ngần ngại để lại cho tôi biết.
+
+Enter a question, or type 'exit' to end: ITunes Stores là gì?
+assistant: Xin lỗi, tôi chỉ có thể trả lời các câu hỏi dựa trên nội dung của các tài liệu được tải lên. Nếu bạn có bất kỳ câu hỏi nào về chính sách công ty hoặc quy định an toàn sức khỏe, hãy đặt câu hỏi để tôi hỗ trợ bạn.
+
+
+Enter a question, or type 'exit' to enITunes Stores là gì?             
+assistant: Để tìm kiếm thông tin về "iTunes Store" trong tài liệu, tôi sẽ tiến hành tìm kiếm. Vui lòng đợi một chút.
+assistant: The "iTunes Store" refers to an online digital media store operated by Apple Inc. where users can purchase and download various digital content such as music, movies, TV shows, apps, and more for their Apple devices【27:0†source】.
+
+
+Enter a question, or type 'exit' to end: ITunes Stores là gì?
+assistant: The "iTunes Store" là một cửa hàng trực tuyến do Apple Inc. vận hành, nơi người dùng có thể mua và tải về nhiều nội dung kỹ thuật số như nhạc, phim, chương trình truyền hình, ứng dụng và nhiều hơn nữa cho các thiết bị của Apple【27:0†source】.
+
+
+Enter a question, or type 'exit' to end: Tổng Bí Thư của Trung Quốc là ai?
+assistant: Tổng Bí thư của Trung Quốc hiện tại là ông Xi Jinping. Nếu bạn cần thêm thông tin hoặc có câu hỏi khác, hãy đặt ra để nhận hỗ trợ.
+
+Enter a question, or type 'exit' to end: các báo cáo tài chính?
+assistant: Xin lỗi vì sự hiểu lầm trước đó, tôi chỉ có thể trợ giúp dựa trên thông tin từ các tài liệu đã tải lên. Nếu có bất kỳ câu hỏi nào về chính sách công ty hoặc quy trình an toàn sức khỏe, đừng ngần ngại để lại cho tôi biết để nhận sự hỗ trợ.
+
+Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
+assistant: Based on the Specialty Cakes Facility Health and Safety Policy, pets are allowed in the facility under certain conditions. Only well-behaved, healthy, and vaccinated pets are permitted. Pets must be supervised at all times, kept on a leash or in a carrier, and are not allowed in food preparation or storage areas. Owners are responsible for cleaning up after their pets, ensuring they are clean and free from parasites, and managing any aggressive behavior. Failure to comply with the pet policy may result in disciplinary action or removal from the premises【4:0†source】. It is advisable to check with your office's specific pet policy to determine if bringing a pet cat into the office is allowed and what conditions or restrictions apply.
+
+Enter a question, or type 'exit' to end: CR7 là ai?
+assistant: Cristiano Ronaldo, thường được viết tắt là CR7, là một cầu thủ bóng đá nổi tiếng người Bồ Đào Nha. Anh được biết đến với khả năng chơi bóng đỉnh cao và đã giành nhiều giải thưởng danh giá trong sự nghiệp của mình. Ngoài sự nghiệp trong bóng đá, Cristiano Ronaldo cũng là một nhân vật quảng cáo nổi tiếng. Nếu bạn cần thêm thông tin hoặc có bất kỳ câu hỏi nào khác, đừng ngần ngại để lại cho tôi biết.
+```

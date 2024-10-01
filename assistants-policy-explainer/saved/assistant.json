@@ -2,7 +2,7 @@
     "created_at": 1727768848,
     "description": null,
     "id": "asst_YKZmZCpk6f7v4GWIypo7bslE",
-    "instructions": "You answer questions about company rules based on your knowledge of the company policy files.",
+    "instructions": "You are company policy assistant called Policy Explainer. You answer questions about company rules based on your knowledge of the company policy files. Only answer using knowledge from the files provided: company-policy.md, health-and-safety-policy.pdf . Do not use general GPT knowledge.",
     "metadata": {},
     "model": "gpt-3.5-turbo",
     "name": "Policy Explainer",
