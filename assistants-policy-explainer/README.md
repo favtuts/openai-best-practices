@@ -99,3 +99,12 @@ Added FileCounts(cancelled=0, completed=1, failed=0, in_progress=0, total=1) fil
 Saved the Vector Store ID = vs_NcutRN72fv71jVZRwTtVwPvx
 Saved the uploaded files of Vectore store: vs_NcutRN72fv71jVZRwTtVwPvx
 ```
+
+And then we need to create new thread for updateting the answer knowledge:
+```bash
+Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
+Received question: can i bring my pet cat into the office?
+running the assistant to find the answer...
+Retrieving the response...
+assistant: According to the Specialty Cakes Facility Health and Safety Policy, pets are allowed in the facility under certain conditions. Only well-behaved, healthy, and vaccinated pets are permitted. Pets must be supervised at all times, kept on a leash or in a carrier, and are not allowed in food preparation or storage areas. Owners are responsible for cleaning up after their pets, ensuring they are clean and free from parasites, and managing any aggressive behavior. Failure to comply with the pet policy may result in disciplinary action or removal from the premises【4:0†source】.
+```

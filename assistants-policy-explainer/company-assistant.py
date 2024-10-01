@@ -272,7 +272,8 @@ def main():
     
     
     # Step 2.1: Add new PDF file for updating PET Polices knowledge base.    
-    add_new_file_to_vector_store(my_vector_store.id, "uploads/health-and-safety-policy.pdf")
+    # Remmber to comment this after the new file was added to Vector Store.
+    # add_new_file_to_vector_store(my_vector_store.id, "uploads/health-and-safety-policy.pdf")
     
     # Step 3: Update the assistant to to use the new Vector Store
     print(f"Step 3: Updating the assistant to to use the new Vector Store")  # Debugging line    
