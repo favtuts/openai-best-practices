@@ -208,8 +208,8 @@ def run_assistant(message_body, thread_id, assistant_id):
         content=message_body             
     )
     
-    print("Created message:")
-    print(f"{message.model_dump_json()}")
+    #print("Created message:")
+    #print(f"{message.model_dump_json()}")
     
     # Run the existing assistant on the existing thread
     run = client.beta.threads.runs.create(
@@ -217,11 +217,11 @@ def run_assistant(message_body, thread_id, assistant_id):
         assistant_id=assistant_id,               
     )
     
-    print("Created run: ")
-    print(f'{run.model_dump_json()}')
+    #print("Created run: ")
+    #print(f'{run.model_dump_json()}')
     
     
-    print("Retrieving the response...")
+    #print("Retrieving the response...")
     # Monitor the assistant and report status
     while run.status != "completed":
         run = client.beta.threads.runs.retrieve(
@@ -238,6 +238,7 @@ def run_assistant(message_body, thread_id, assistant_id):
     
     # Display the output
     for message in reversed(messages.data):
+        print(f"{message.model_dump()}")
         print(message.role + ": " + message.content[0].text.value)
     return messages
     

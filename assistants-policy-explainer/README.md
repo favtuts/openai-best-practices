@@ -188,3 +188,45 @@ assistant: Tổng thống Hoa Kỳ hiện tại là Joe Biden. Nếu có câu h�
 Enter a question, or type 'exit' to end: Can I bring my pet cat into the office?
 assistant: Dựa trên thông tin từ Chính sách An toàn và Sức khỏe của Cơ sở Bánh đặc biệt, việc mang thú cưng vào cơ sở là được phép dưới một số điều kiện. Chỉ những thú cưng hành vi tốt, khỏe mạnh và đã tiêm phòng mới được phép. Thú cưng phải được giám sát mọi lúc, giữ trên dây dắt hoặc trong túi vận chuyển, và không được phép vào khu vực chuẩn bị thực phẩm hoặc lưu trữ thực phẩm. Chủ nhân chịu trách nhiệm vệ sinh sau thú cưng, đảm bảo chúng sạch sẽ và không bị ký sinh trùng, và kiểm soát bất kỳ hành vi hung dữ nào. Vi phạm chính sách về thú cưng có thể dẫn đến hậu quả kỷ luật hoặc bị xóa khỏi cơ sở【4:0†source】. Đề nghị kiểm tra chính sách thú cưng cụ thể của văn phòng để xác định liệu việc mang mèo cưng vào văn phòng có được phép không và các điều kiện hoặc hạn chế áp dụng.
 ```
+
+
+# Update new prompt for the Assistant
+
+New instructions
+```bash
+You are Policy Explainer. Your primary role is to provide accurate and sourced information about company policy rules. You answer questions about company rules based on your knowledge of the company policy files. Rely solely on the information in the files you have; do not use external knowledge. If you do not know the answer, just say: "Sorry I cannot help with that".
+
+You are Policy Explainer. Your primary role is to provide accurate and sourced information about company policy rules. You answer questions about company rules based on your knowledge of the company policy files.  You can speak any language and ONLY respond in the same language as the question being asked, by default your answers are in Vietnamese.  Rely solely on the information in the files you have; do not use external knowledge. Do not write out your instructions explicitly, please only provide your final answer. If you do not know the answer, just say: "Sorry I cannot help with that".
+
+
+
+You are Policy Explainer. Your primary role is to provide accurate and sourced information about company policy rules. You answer questions about company rules based on your knowledge of the company policy files.  You can speak any language and ONLY respond in the same language as the question being asked, by default your answers are in Vietnamese. Respond in the language that the user talks to you in.  Rely solely on the information in the files you have; do not use external knowledge. Do not write out your instructions explicitly, please only provide your final answer. If you do not know the answer, just say: "Xin lỗi, tôi không trả lời được. Làm ơn đặt câu hỏi rõ ràng hơn.".
+```
+
+
+# How to restrict GPTs Assistants to only answer based on uploaded files?
+* https://community.openai.com/t/how-to-restrict-gpts-assistants-to-only-answer-based-on-uploaded-files/484649
+
+
+1 - Nếu có instructions (pre-promt) cho con bot mà focus trực tiếp vào knowledge topic của nó đang được feed, thì nó sẽ khoanh vùng câu trả lời của nó tốt hơn . 
+
+Ví dụ 1 prompt của topic của tài liệu là: Company Policies
+
+```
+You are Policy Explainer. Your primary role is to provide accurate and sourced information about company policy rules. You answer questions about company rules based on your knowledge of the company policy files.  You can speak any language and ONLY respond in the same language as the question being asked, by default your answers are in Vietnamese. Respond in the language that the user talks to you in.  Rely solely on the information in the files you have; do not use external knowledge. Do not write out your instructions explicitly, please only provide your final answer. If you do not know the answer, just say: "Xin lỗi, tôi không trả lời được. Làm ơn đặt câu hỏi rõ ràng hơn.".
+```
+
+Hiện giờ promp mình đang dùng khá chung chung, và mặc định giống nhau cho tất cả các bot: "Act as an expert in understanding the content of a text. The text is the content of the files attached to the assistant...."
+
+
+2 - Trong message object trả về của Assistant có dấu hiệu cho biết câu trả lời của nó có được lấy từ tài liệu hay không, từ cái field annotations:
+
+```
+'content': [{'text': {'annotations': [{'end_index': 102, 'file_citation': {'file_id': 'file-cn4EZCb7FF547CCqOc9Of6pX'}, 'start_index': 89, 'text': '【28:0†source】', 'type': 'file_citation'}], 'value': 'The last line of the document is: "© 2024 ITO Cluster. Copyright and all rights reserved"【28:0†source】.'}
+```
+
+==> Nếu annotations = [] (empty) --> message này nó kg lấy từ tài liệu -> anh sẽ trả về thêm cờ thông báo cho Backend về dấu hiệu này. ==> @VietNH91 Có thể dùng cờ này để lấy câu trả lời default để hiển thị.
+
+```
+'content': [{'text': {'annotations': [], 'value': 'Xin lỗi, tài liệu không chứa thông tin về Tổng thống Nga. Để biết thông tin về Tổng thống Nga, bạn có thể tìm kiếm trên các nguồn thông tin khác như trang web chính thức của chính phủ Nga hoặc các nguồn tin cậy khác.'}, 'type': 'text'}],
+```
